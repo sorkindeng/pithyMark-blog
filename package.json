@@ -1,0 +1,38 @@
+{
+  "name": "pithymark-blog",
+  "version": "0.1.1",
+  "description": "A pithy blog based on nodejs,koa2,ajax,mysql",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sorkindeng/pithyMark-blog.git"
+  },
+  "keywords": [
+    "blog",
+    "nodejs",
+    "koa2",
+    "ajax",
+    "mysql"
+  ],
+  "author": "Sorkin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sorkindeng/pithyMark-blog/issues"
+  },
+  "homepage": "https://github.com/sorkindeng/pithyMark-blog#readme",
+  "dependencies": {
+    "koa": "^2.4.1",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.3.0",
+    "koa-views": "^6.1.2",
+    "nunjucks": "^3.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}
