@@ -1,25 +1,44 @@
 var Koa=require('koa');
 var bodyParser = require('koa-bodyparser');
 var views = require('koa-views');
+var session = require('koa-session-minimal');
+var koaStatic = require('koa-static');
 
 
 
 var routeIndex = require('./routes/index')
+var routeAdmin = require('./routes/admin')
 
 
 var app=new Koa();
 
+// 配置静态资源加载中间件
+app.use(koaStatic(__dirname + '/public'))
 
-app.use(bodyParser());
+// 配置session中间件
+app.use(session({
+  key: 'u-session-id',
+  cookie: {                   // 与 cookie 相关的配置
+    domain: 'localhost',    // 写 cookie 所在的域名
+    path: '/',              // 写 cookie 所在的路径
+    maxAge: 1000 * 60 * 60*24,      // cookie 有效时长
+    httpOnly: true,         // 是否只用于 http 请求中获取
+    overwrite: false        // 是否允许重写
+  }
+}))
+
+
 
 
 app.use(views((__dirname + '/views'), {
-  extension: 'html',
-  map: { html: 'nunjucks' }
-}));
+  extension: 'ejs'
+}))
+
+app.use(bodyParser());
 
 // logger
 app.use(async (ctx, next) => {
+  console.log(`=========================>${ctx.method} ${ctx.url}`)
   const start = new Date()
   await next()
   const ms = new Date() - start
@@ -27,7 +46,7 @@ app.use(async (ctx, next) => {
 })
 // routes
 app.use(routeIndex.routes(), routeIndex.allowedMethods())
-//app.use(users.routes(), users.allowedMethods())
+app.use(routeAdmin.routes(), routeAdmin.allowedMethods())
 
 
 // 监听在3000端口

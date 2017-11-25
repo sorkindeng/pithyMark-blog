@@ -26,11 +26,15 @@
   },
   "homepage": "https://github.com/sorkindeng/pithyMark-blog#readme",
   "dependencies": {
+    "ejs": "^2.5.7",
     "koa": "^2.4.1",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.3.0",
+    "koa-session-minimal": "^3.0.4",
+    "koa-static": "^4.0.2",
     "koa-views": "^6.1.2",
-    "nunjucks": "^3.0.1"
+    "md5": "^2.2.1",
+    "mysql": "^2.15.0"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"

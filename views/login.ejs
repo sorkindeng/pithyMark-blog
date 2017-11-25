@@ -1,0 +1,30 @@
+<% include header %>
+
+<% if (session.error) { %>
+<div  class="container"><%- session.error %></div>
+<% }else{ %>
+  <% if (session.user) {%>
+    <div  class="container">
+      <label><%- session.user.username %>用户已登录</label>
+      <a href="/logout">点这里登出</a>
+    </div>
+  <% }else{ %>
+    <div class="container">
+    <form class="form create" method="post">
+      <div>
+        <label>用户名：</label> 
+        <input placeholder="用户名" type="text" name="username">
+      </div>
+      <div>
+        <label>密码：</label> 
+        <input placeholder="密码" type="password" name="password">
+      </div>
+      <input class="submit" type="submit" value="登陆"/>
+    </form>		
+    </div>
+  <% } %>
+<% } %>
+
+
+
+<% include footer %>
