@@ -1,5 +1,5 @@
 var mysql = require('mysql');
-var config = require('../config/config.js')
+var config = require('../config/config')
 
 
 var pool  = mysql.createPool({
@@ -14,14 +14,19 @@ let query = function( sql, values ) {
   return new Promise(( resolve, reject ) => {
     pool.getConnection(function(err, connection) {
       if (err) {
-        resolve( err )
+        console.log('MYSQL>>>>>>>>>>>>>>>>>>>>pool.getConnection Error:')
+        console.log(err)
+        reject( err )
       } else {
         console.log('>>>>>SQL：'+ sql )
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+ values)
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>参数：'+ values)
         connection.query(sql, values, ( err, rows) => {
           if ( err ) {
+            console.log('MYSQL>>>>>>>>>>>>>>>>>>>>pool.getConnection Error:')
+            console.log(err)
             reject( err )
           } else {
+            console.log(rows)
             resolve( rows )
           }
           connection.release()

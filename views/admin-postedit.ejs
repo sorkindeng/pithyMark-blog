@@ -1,0 +1,55 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title> <%- title %> </title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+<body>
+  <div id="page-wrapper">
+	<form id="form-postedit" method="post"  action="/admin/post/save">
+		<div id="text-wrapper">
+      <input class="hide" id="inputId" name="txtId" value="">
+			<div>&nbsp;&nbsp;文章标题：<input id="inputTitle" type="text" name="txtTitle" value="bbbb1"/> </div>           
+			<div>&nbsp;&nbsp;访问地址：<b> / </b><input id="inputPath" type="text" name="txtPath" value="bbbb1"/> .html </div>
+			<div><textarea id="text-area" name="txtContent">文章正文...</textarea></div>
+		</div>
+		<div id="rightBar">
+			<div>
+				<button class="btn btn-pub" type="submit" name="public" value="public">立即发布</button>
+				<button class="btn" type="submit" name="draft" value="draft">保存草稿</button>
+			</div>
+			<div>  
+			 <select id="post-cate" name="txtCate">
+				<option value="0">--选择分类--</option>
+        <option value="1">我是下拉项目1</option>
+				<option value="2">我是下拉项目2</option>
+				<option value="3">我是下拉项目3</option>
+				<option value="4">我是下拉项目4</option>
+		    </select>
+		  </div>
+			<div>
+				<input type="checkbox" id="isHold" name="isHold" value="hold"/>设为私密文章(只能从后台查看)</br>
+				<input type="checkbox" id="isComment" name="isComment" value="comment"/>允许评论(需要第三方支持)
+			</div>
+		</div>
+     </form>
+  </div>
+  <script>
+    $(function(){
+      $("#text-area").height($(window).height()-90);
+      
+      if( <%= isEdit %> ) {
+        console.log( "<%= post['id'] %>" );
+        $("#inputId").val( "<%= post['id'] %>" );
+        $("#inputTitle").val( "<%= post['title'] %>" );
+        $("#inputPath").val( "<%= post['pathname'] %>"  );
+        $("#text-area").val( `<%= post['markdown_content'] %>`)  
+        if ( 4 == "<%= post['status'] %>"){   $("#isHold").prop('checked','true') } ;
+        if(1=="<%= post['allow_comment'] %>") {   $("#isComment").prop('checked','true')}  ;
+      }
+    })
+  </script>  
+
+</body>
+</html>  

@@ -1,0 +1,46 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title> <%- title %> </title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+<body>
+  <div id="page-wrapper">
+    <div id="main-header">
+      <div id="top-logo">
+        <span>pithyMark-Blog</span>
+      </div>
+      <div id="navbar-custom">
+        <a href="/logout"><span>退出登录</span></a>
+      </div>
+    </div>
+    <div id="sidebar-left">
+        <ul class="sidebar-menu">
+          <li><a href="admin/post/new"  target="contentFrame">新增文章</a></li>
+          <li><a href="admin/posts"  target="contentFrame">文章管理</a></li>
+          <li><a href="admin/options"  target="contentFrame">参数配置</a></li>
+          <li><a href="post/add">管理文章</a></li>
+          <li><a href="post/add">管理文章</a></li>
+          <li><a href="post/add">管理文章</a></li>
+          <li><a href="post/add">管理文章</a></li>           
+        </ul>
+    </div>
+    <div id="main-content">
+        <div id="tips-wrapper">tipsssssssssssssssssssssssssssssssssssssssssss</div>
+        <iframe id="contentFrame" name="contentFrame" src="welcome.html" scrolling="yes" frameborder="no" width="100%"></iframe>
+    </div>
+    <div id="main-footer">
+        Copyright &copy; pithyMark Blog, Powered by <a href="#" >pithy</a> and <a href="#" >blog</a>
+    </div>
+
+  </div>
+
+  <script>
+    $(function(){
+      $("#contentFrame").height($(window).height()-74);
+    })
+  </script>
+
+</body>
+</html>

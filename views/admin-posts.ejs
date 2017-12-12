@@ -1,0 +1,81 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title> <%- title %> </title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+  <script  type="text/javascript">
+    function formatDate(strDate){
+      var dtDate = new Date(strDate);
+      var month = dtDate.getMonth() +1;
+      var strDate = dtDate.getFullYear();
+      strDate += "-";
+      strDate += (month <10 ? "0"+month : month );
+      strDate += "-";
+      strDate += (dtDate.getDate()<10 ? "0"+dtDate.getDate():dtDate.getDate() );
+      strDate += " ";
+      strDate += (dtDate.getHours() <10 ? "0"+dtDate.getHours() : dtDate.getHours());
+      strDate += ":";
+      strDate += (dtDate.getMinutes() <10 ? "0"+dtDate.getMinutes() : dtDate.getMinutes());
+      strDate += ":";
+      strDate += (dtDate.getSeconds() <10 ? "0"+dtDate.getSeconds() : dtDate.getSeconds());
+      return strDate;
+    }
+    function formatStatus(status){
+      var strStatus = "未定义";
+      if (status==0) { strStatus = "草稿"};
+      if (status==1) { strStatus = "待审核"};
+      if (status==2) { strStatus = "拒绝"};
+      if (status==3) { strStatus = "发布"};
+      if (status==4) { strStatus = "私密"};
+      return strStatus;
+    }
+  </script>
+<body>
+  <div id="iframe-wrapper">
+    <table class="table" id="tbl-posts">
+      <thead>
+        <tr>
+          <th class="tbl-id hide">id</th>
+          <th id="postTitle">文章标题</th>
+          <th id="postStatus">状态</th>
+          <th class="tbl-datetime">创建日期</th>
+          <th class="tbl-action">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% posts.forEach(function(res){ %>
+        <tr>
+            <td class="hide"><%= res['id'] %></td>
+            <td><%= res['title'] %></td>
+            <td><script> document.write(formatStatus( `<%= res['status'] %>` ))  </script>  </td>
+            <td><script> document.write(formatDate( `<%= res['create_time'] %>` ))  </script>  </td>
+            <td>
+              <a href="/admin/post/public/<%= res['id'] %>">发布</a>
+              <a href="/admin/post/edit/<%= res['id'] %>">编辑</a>
+              <a href="/admin/post/delete/<%= res['id'] %>">删除</a>
+            </td>
+        </tr>
+        <% }) %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4">
+            <div class="grayr">
+              <% if (session.postCurPage == 1 ){ %><span class="disabled">上一页</span>
+              <% }else{ %><a href='/admin/posts?page=<%- (session.postCurPage-1) %>'>上一页</a>
+              <% } %>
+              <%- session.postCurPage %> / <%- session.postPages %> ( <%- session.postCounts %> )
+              <% if (session.postCurPage == session.postPages ){ %><span class="disabled">下一页</span>
+              <% }else{ %><a href='/admin/posts?page=<%- (session.postCurPage+1) %>'>下一页</a>
+              <% } %>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title> <%- title %> </title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+<body>
+  <div id="iframe-wrapper">
+    <div id="tips-wrapper"></div>      
+    <table class="table" id="tbl-options">
+      <thead>
+        <tr>
+          <th id="optKey">参数名称</th>
+          <th id="optValue">参数值</th>
+          <th id="optDesc">备注说明</th>
+          <th id="optAction">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% opts.forEach(function(res){ %>
+        <tr>
+          <td class="txtKey"><%= res['optkey'] %></td>
+          <td class="txtValue">
+            <lable class="lbl" name="lblValue"><%= res['optvalue'] %></lable>
+            <input class="input hide" type="text" name="txtValue" value="<%= res['optvalue'] %>" />
+          </td>
+          <td class="txtDesc">
+            <lable class="lbl" name="lblDesc"><%= res['optdesc'] %></lable>
+            <input class="input hide" type="text" name="txtDesc" value="<%= res['optdesc'] %>" />
+          </td>
+          <td>
+            <button class="btn btn-update" onclick="updateOpt(this)">修改</button>
+            <button class="btn btn-save hide" onclick="saveOpt(this)">保存</button>
+            <button class="btn btn-cancel hide" onclick="cancelOpt(this)">取消</button>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+    
+  <script  type="text/javascript">
+    function editStatus(obj, edit){
+      var td = $(obj.parentNode);
+      var tr = $(obj.parentNode.parentNode).eq(0);
+      if (edit){
+        td.find(".btn-update").addClass("hide");
+        td.find(".btn-save").removeClass("hide");
+        td.find(".btn-cancel").removeClass("hide");
+        //tr.find(".input-border0").removeAttr("readonly").removeClass("input-border0");
+        //tr.find("input[name='txtValue']").attr("value", tr.find("lable[name='lblValue']").eq(0).text());
+        //tr.find("input[name='txtDesc']").attr("value", tr.find("lable[name='lblDesc']").eq(0).text());
+        tr.find(".lbl").addClass("hide");
+        tr.find(".input").removeClass("hide");
+      }else{
+        td.find(".btn-update").removeClass("hide");
+        td.find(".btn-save").addClass("hide");
+        td.find(".btn-cancel").addClass("hide");
+        //tr.find(".input").attr("readonly","readonly").addClass("input-border0");
+        tr.find(".lbl").removeClass("hide");
+        tr.find(".input").addClass("hide");
+      }
+    }
+
+    function updateOpt(obj){
+      editStatus(obj, true);
+    }
+    function delOpt(obj){
+      var rowId = obj.parentNode.parentNode.rowIndex;
+      //alert(rowId);
+      var row = obj.parentNode.parentNode;  //tr
+      //alert(row.innerHTML);
+      //row.remove();
+     }
+    function saveOpt(obj){
+      // save to db and reload html
+      var rowId = obj.parentNode.parentNode.rowIndex;
+      var tr = $(obj.parentNode.parentNode);
+      var optKey = tr.find(".txtKey").text();
+      var optValue = tr.find("input[name='txtValue']").val();
+      var optDesc = tr.find("input[name='txtDesc']").val();
+      //console.log(`txtKey=${optKey}; txtValue=${optValue}; txtDesc=${optDesc}`);
+
+      $.ajax({
+        url: "/admin/options/update",
+        data: {txtKey: optKey, txtValue: optValue, txtDesc: optDesc },
+        type: "POST",
+        cache: false,
+        dataType: 'json',
+        success: function (msg) {
+            if (msg) {
+              window.location.href = "/admin/options"
+            }
+            else{
+              $('#tips-wrapper').text('修改失败！')
+              $('#tips-wrapper').show(1000)    
+            }
+        },
+        error: function () {
+          alert('异常');
+        }
+      })			
+      
+
+      editStatus(obj, false);
+    }
+    function cancelOpt(obj){
+      editStatus(obj, false);
+    }
+  </script>
+ 
+
+</body>
+</html>

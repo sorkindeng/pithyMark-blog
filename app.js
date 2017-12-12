@@ -37,18 +37,22 @@ app.use(views((__dirname + '/views'), {
 app.use(bodyParser());
 
 // logger
-app.use(async (ctx, next) => {
-  console.log(`=========================>${ctx.method} ${ctx.url}`)
-  const start = new Date()
-  await next()
-  const ms = new Date() - start
-  console.log(`=========================>${ctx.method} ${ctx.url} - ${ms}ms`)
-})
+// app.use(async (ctx, next) => {
+//   console.log(`=========================>${ctx.method} ${ctx.url}`)
+//   const start = new Date()
+//   await next()
+//   const ms = new Date() - start
+//   console.log(`=========================>${ctx.method} ${ctx.url} - ${ms}ms`)
+// })
 // routes
 app.use(routeIndex.routes(), routeIndex.allowedMethods())
 app.use(routeAdmin.routes(), routeAdmin.allowedMethods())
 
 
+// error-handling
+app.on('error', (err, ctx) => {
+  console.error('server error', err, ctx)
+});
 // 监听在3000端口
 app.listen(3000, ()=>{
   console.log('[pithyMark-blog]The server is starting at port 3000');

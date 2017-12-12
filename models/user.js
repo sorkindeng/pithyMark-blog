@@ -1,18 +1,15 @@
 var mysql = require('../service/mysql');
+var md5 = require('md5');
 
-// 注册用户
-let insertUser = function( value ) {
-  let _sql = "insert into users(name,pass) values(?,?);"
-  return mysql.query( _sql, value )
-}
 
-let findUserByName = function( name ) {
-  let _sql = `select * from users where name="${name}";`
+//验证创世人密码
+let findFounderPassword = function( password ) {
+  let _sql = `SELECT * FROM pmb_options_sys WHERE optkey="founder_pass";`
   return mysql.query( _sql )
 }
 
+
 module.exports={
-  insertUser,
-  findUserByName
+  findFounderPassword
 }
   

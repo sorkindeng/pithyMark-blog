@@ -1,30 +1,67 @@
-<% include header %>
-
-<% if (session.error) { %>
-<div  class="container"><%- session.error %></div>
-<% }else{ %>
-  <% if (session.user) {%>
-    <div  class="container">
-      <label><%- session.user.username %>用户已登录</label>
-      <a href="/logout">点这里登出</a>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title> <%- title %> </title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+<body>
+  <div id="top-logo">
+    <image src="/images/logo.png"></image>@pithyMark
+  </div>
+  <div id="tips-wrapper"></div>
+  <div id="login-wrapper">
+    <div id="welcome-info">
+        <h1>welcome.</h1>
+        <h1>welcome..</h1>
+        <h1>welcome...</h1>
     </div>
-  <% }else{ %>
-    <div class="container">
-    <form class="form create" method="post">
-      <div>
-        <label>用户名：</label> 
-        <input placeholder="用户名" type="text" name="username">
-      </div>
-      <div>
-        <label>密码：</label> 
-        <input placeholder="密码" type="password" name="password">
-      </div>
-      <input class="submit" type="submit" value="登陆"/>
-    </form>		
-    </div>
-  <% } %>
-<% } %>
+    <div id="login-form">
+      <form class="form" method="post">
+          <div>
+            <label>请输入创始人管理密码：</label> 
+            <input placeholder="密码" type="password" name="password"/>
+          </div>
+          <input id="submit" type="button" value="登陆"/>
+      </form>		
+    </div>  
+  </div>
+  <div id="bottom-info">
+    Copyright &copy; pithyMark Blog, Powered by <a href="#" >pithy</a> and <a href="#" >blog</a>
+  </div>
+	<script>
+      $('#submit').click(()=>{
+        if ( $('input[name=password]').val().trim() == '' ) {
+          $('#tips-wrapper').text('请输入密码')
+          $('#tips-wrapper').show(1000)
+        }else{
+          $.ajax({
+            url: "/login",
+            data: $('.form').serialize(),
+            type: "POST",
+            cache: false,
+            dataType: 'json',
+            success: function (msg) {
+               if (!msg) {
+                   $('#tips-wrapper').text('密码错误')
+                   $('input[name=password]').val('')
+                   $('#tips-wrapper').show(1000)
+               }
+               else{
+                   $('#tips-wrapper').text('登录成功，准备进入管理页面......')
+                   $('#tips-wrapper').show(1000)
+                   setTimeout(()=>{
+                     window.location.href = "/admin"
+                   },2000)	               	
+               }
+            },
+            error: function () {
+              alert('异常');
+            }
+          })			
+        }
+      })		
+    </script>
 
-
-
-<% include footer %>
+</body>
+</html>
