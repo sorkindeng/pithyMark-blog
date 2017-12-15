@@ -1,0 +1,81 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title> <%- title %> </title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+<body>
+  <div id="iframe-wrapper">
+    <div id="tips-wrapper"></div>      
+    <table class="table" id="tbl-options">
+      <thead>
+        <tr>
+          <th class="hide">id</th>
+          <th>分类名称</th>
+          <th>文章数</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% cates.forEach(function(res){ %>
+        <tr>
+          <td class="hide"><%= res['id'] %></td>
+          <td class="txtName">
+            <%= res['name'] %>
+          </td>
+          <td class="txtCount">
+            <lable class="lbl" name="lblCount"><%= res['count'] %></lable>
+          </td>
+          <td>
+            <% if( (res['count'] < 0 )|| (res['count'] ==null )) { %>
+              <a href="/admin/cate/delete/<%= res['id'] %>">删除</a>
+            <% } %>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3">
+            <input class="input" type="text" name="txtName"/>            
+            <button class="btn btn-save" onclick="saveCate(this)">新增分类</button>            
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+    
+  <script  type="text/javascript">
+    function saveCate(obj){
+      // save to db and reload html
+      var rowId = obj.parentNode.parentNode.rowIndex;
+      var tr = $(obj.parentNode.parentNode);
+      var cateName = tr.find("input[name='txtName']").val();
+
+      $.ajax({
+        url: "/admin/cate/save",
+        data: {txtName: cateName},
+        type: "POST",
+        cache: false,
+        dataType: 'json',
+        success: function (msg) {
+            if (msg) {
+              window.location.href = "/admin/cate"
+            }
+            else{
+              $('#tips-wrapper').text('保存失败！')
+              $('#tips-wrapper').show(1000)    
+            }
+        },
+        error: function () {
+          alert('异常');
+        }
+      })			
+    }
+  </script>
+ 
+
+</body>
+</html>

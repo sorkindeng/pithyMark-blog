@@ -1,0 +1,45 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title> <%- title %> </title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+<body>
+  <div id="iframe-wrapper">
+    <table class="table" id="tbl-posts">
+      <thead>
+        <tr>
+          <th class="tbl-id hide">id</th>
+          <th>栏目名称</th>
+          <th>栏目地址</th>
+          <th class="tbl-action">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% catalogs.forEach(function(res){ %>
+        <tr>
+            <td class="hide"><%= res['id'] %></td>
+            <td><%= res['title'] %></td>
+            <td>/<%= res['pathname'] %></td>
+            <td>
+              <% if (res['posttype'] != "9" ){ %>
+                <a href="/admin/catalog/edit/<%= res['id'] %>">编辑</a>
+                <a href="/admin/catalog/delete/<%= res['id'] %>">删除</a>
+              <% } %>
+            </td>
+        </tr>
+        <% }) %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3">
+            <a href="/admin/catalog/new">新增栏目</a>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+</body>
+</html>

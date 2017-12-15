@@ -28,6 +28,7 @@ function postsFormat(posts){
 let findForPage = function(offset, rows){
   let _sql=`SELECT id,posttype,status,title,create_time FROM ${_tableName} 
             WHERE status<>9 
+            AND posttype=0
             ORDER BY id DESC
             LIMIT ${offset},${rows};`
   return mysql.query(_sql)
@@ -36,20 +37,28 @@ let findForPage = function(offset, rows){
 
 // 新增文章
 let newRow = function(value) {
-  let _sql=`INSERT INTO ${_tableName}(posttype,status,title,pathname,
+  let _sql=`INSERT INTO ${_tableName}(posttype,status,postcate,title,pathname,
             summary,markdown_content,content,
             allow_comment,create_time) 
-          VALUES(0,?,?,?,?,?,?,?,?);`
+          VALUES(?,?,?,?,?,?,?,?,?,?);`
   return mysql.query( _sql, value)
 }
 //修改
 let updateRowById = function(value) {
-  let _sql=`UPDATE ${_tableName} SET status=?,title=?,pathname=?,
+  let _sql=`UPDATE ${_tableName} SET status=?,postcate=?,title=?,pathname=?,
             summary=?,markdown_content=?,content=?,
             allow_comment=?,update_time=?
             WHERE id=?`
   return mysql.query( _sql, value)
 }
+
+
+// 修改文章状态
+let updateStatusById = function(value) {
+  let _sql=`UPDATE ${_tableName} SET status=? WHERE id=?`
+  return mysql.query( _sql, value)
+}
+
 // 删除文章
 let deleteById = function(postId) {
   let _sql=`DELETE FROM ${_tableName} WHERE id=${postId}`
@@ -67,13 +76,19 @@ let findByPathname = function(pathname) {
   return mysql.query( _sql)
 }
 
-// 修改文章状态
-let updateStatusById = function(value) {
-  let _sql=`UPDATE ${_tableName} SET status=? WHERE id=?`
-  return mysql.query( _sql, value)
+// 查询文章 group by
+let findAllByCate = function() {
+  let _sql=`SELECT postcate, count(*) as counts FROM ${_tableName} GROUP BY postcate;`
+  return mysql.query( _sql)
 }
 
-
+// 查询栏目
+let findAllCatalog = function() {
+  let _sql=`SELECT id,posttype,status,title,pathname FROM ${_tableName}
+          WHERE posttype<>0
+          ORDER BY id ASC;`
+  return mysql.query( _sql)
+}
 /* add(data, options, replace){
   let values = [];
   let fields = [];
@@ -101,6 +116,8 @@ module.exports={
   deleteById,
   findById,
   findByPathname,
+  findAllByCate,
+  findAllCatalog,
   findForPage
 }
   

@@ -1,0 +1,39 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title> <%- title %> </title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+<body>
+  <div id="page-wrapper">
+	<form id="form-postedit" method="post"  action="/admin/catalog/save">
+		<div id="text-wrapper">
+      <input class="hide" id="inputId" name="txtId" value="">
+			<div>&nbsp;&nbsp;栏目名称：<input id="inputTitle" type="text" name="txtTitle" value="bbbb1"/> </div>           
+			<div>&nbsp;&nbsp;访问地址：<b> / </b><input id="inputPath" type="text" name="txtPath" value="bbbb1"/></div>
+			<div><textarea id="text-area" name="txtContent">栏目封面内容...</textarea></div>
+		</div>
+		<div id="rightBar">
+			<div>
+				<button class="btn btn-pub" type="submit" name="public" value="public">保存</button>
+			</div>
+		</div>
+     </form>
+  </div>
+  <script>
+    $(function(){
+      $("#text-area").height($(window).height()-90);
+      
+      if( <%= isEdit %> ) {
+        console.log( "<%= post['id'] %>" );
+        $("#inputId").val( "<%= post['id'] %>" );
+        $("#inputTitle").val( "<%= post['title'] %>" );
+        $("#inputPath").val( "<%= post['pathname'] %>"  );
+        $("#text-area").val( `<%= post['markdown_content'] %>`);
+      }
+    })
+  </script>  
+
+</body>
+</html>  

@@ -22,6 +22,12 @@ let getCounts = async function() {
   }
 }
 
+// 
+let findAll = function(){
+  let _sql=`SELECT id,name FROM ${_tableName};`
+  return mysql.query(_sql)
+}
+
 
 // 分页查询
 let findForPage = function(offset, rows){
@@ -31,11 +37,35 @@ let findForPage = function(offset, rows){
   return mysql.query(_sql)
 }
 
+// 新增
+let newRow = function(value) {
+  let _sql=`INSERT INTO ${_tableName}(name) VALUES(?);`
+  return mysql.query( _sql, value)
+}
 
+// 删除
+let deleteById = function(rowId) {
+  let _sql=`DELETE FROM ${_tableName} WHERE id=${rowId}`
+  return mysql.query( _sql)
+}
+
+// 查询 group by
+//select id,name,count from pmb_cate as a left join
+//(select postcate, count(*) as count from pmb_posts group by postcate) as b
+//on a.name = b.postcate
+let findAllAndPostCount = function() {
+  let _sql=`SELECT id,name,count FROM pmb_cate AS a LEFT JOIN
+          (SELECT postcate,count(*) AS count FROM pmb_posts GROUP BY postcate) AS b
+          ON a.name=b.postcate;`
+  return mysql.query( _sql)
+}
 
 module.exports={
   getCounts,
+  newRow,
+  deleteById,
   findForPage,
-  updateOption
+  findAllAndPostCount,
+  findAll
 }
   

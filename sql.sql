@@ -49,6 +49,7 @@ CREATE TABLE `pmb_posts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posttype` tinyint(11) NOT NULL DEFAULT '0' COMMENT '0 为文章，1 为页面，9 系统页面',
   `status` tinyint(11) NOT NULL DEFAULT '0' COMMENT '0 为草稿，1 为待审核，2 为已拒绝，3 为已经发布，4 为私有不公开，9 删除',
+  `postcate` varchar(32) DEFAULT '未分类',
   `title` varchar(255) NOT NULL,
   `pathname` varchar(255) NOT NULL DEFAULT '' COMMENT 'URL 的 pathname',
   `summary` longtext COMMENT '摘要',
@@ -62,10 +63,14 @@ CREATE TABLE `pmb_posts` (
   KEY `create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;  
   
-INSERT INTO `pmb_posts` (`title`)
+INSERT INTO `pmb_posts` (`posttype`,`title`,`pathname`)
 VALUES
-  ('创始人密码'),
-  ('上传可以选择七牛云');
+  (9, '首页', 'home'),
+  (9, '分类', 'categories'),
+  (9, '归档', 'archives'),
+  (1, '关于', 'about'),
+  (0, '创始人密码','pathname1'),
+  (0, '上传可以选择七牛云','pathname2');
 
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `pmb_post_history`;
@@ -89,37 +94,6 @@ CREATE TABLE `pmb_cate` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-# ------------------------------------------------------------
-DROP TABLE IF EXISTS `pmb_post_cate`;
-CREATE TABLE `pmb_post_cate` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `post_id` int(11) NOT NULL,
-  `cate_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `post_cate` (`post_id`,`cate_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-# ------------------------------------------------------------
-DROP TABLE IF EXISTS `pmb_tag`;
-CREATE TABLE `pmb_tag` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `pathname` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-# ------------------------------------------------------------
-DROP TABLE IF EXISTS `pmb_post_tag`;
-CREATE TABLE `pmb_post_tag` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `post_id` int(11) NOT NULL,
-  `tag_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `post_tag` (`post_id`,`tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-  
+INSERT INTO `pmb_cate` (`name`)
+VALUES
+  ('日志');

@@ -36,14 +36,14 @@ app.use(views((__dirname + '/views'), {
 
 app.use(bodyParser());
 
-// logger
-// app.use(async (ctx, next) => {
-//   console.log(`=========================>${ctx.method} ${ctx.url}`)
-//   const start = new Date()
-//   await next()
-//   const ms = new Date() - start
-//   console.log(`=========================>${ctx.method} ${ctx.url} - ${ms}ms`)
-// })
+//logger
+app.use(async (ctx, next) => {
+  console.log(`=========================>>>${ctx.method} ${ctx.url}`)
+  const start = new Date()
+  await next()
+  const ms = new Date() - start
+  console.log(`====================<<<<<${ctx.method} ${ctx.url} - ${ms}ms`)
+})
 // routes
 app.use(routeIndex.routes(), routeIndex.allowedMethods())
 app.use(routeAdmin.routes(), routeAdmin.allowedMethods())

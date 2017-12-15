@@ -1,0 +1,55 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title> <%- title %> </title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+<body>
+  <div id="iframe-wrapper">
+    <div id="tips-wrapper"></div>      
+    <div>
+      原密码：<input class="input" type="text" name="oldPwd"/> <br/>
+      新密码：<input class="input" type="text" name="newPwd"/> <br/>
+      重复新密码：<input class="input" type="text" name="newPwdRep"/> <br/>
+      <button class="btn btn-save" onclick="savePwd(this)">修改密码</button>            
+    </table>
+    </div>
+  </div>
+
+    
+  <script  type="text/javascript">
+    function savePwd(obj){
+      // save to db and reload html
+      var rowId = obj.parentNode.parentNode.rowIndex;
+      var tr = $(obj.parentNode.parentNode);
+      var strPwd1 = tr.find("input[name='oldPwd']").val();
+      var strPwd2 = tr.find("input[name='newPwd']").val();
+      var strPwd3 = tr.find("input[name='newPwdRep']").val();
+      
+      $.ajax({
+        url: "/admin/user",
+        data: {oldPwd: strPwd1,newPwd:strPwd2, newPwdRep:strPwd3},
+        type: "POST",
+        cache: false,
+        dataType: 'json',
+        success: function (msg) {
+            if (msg) {
+              $('#tips-wrapper').text('修改密码成功！')
+              $('#tips-wrapper').show(1000)    
+            }
+            else{
+              $('#tips-wrapper').text('失败！')
+              $('#tips-wrapper').show(1000)    
+            }
+        },
+        error: function () {
+          alert('异常');
+        }
+      })			
+    }
+  </script>
+ 
+
+</body>
+</html>

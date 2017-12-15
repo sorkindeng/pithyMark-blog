@@ -21,11 +21,10 @@
 			</div>
 			<div>  
 			 <select id="post-cate" name="txtCate">
-				<option value="0">--选择分类--</option>
-        <option value="1">我是下拉项目1</option>
-				<option value="2">我是下拉项目2</option>
-				<option value="3">我是下拉项目3</option>
-				<option value="4">我是下拉项目4</option>
+        <option value="未分类">--选择分类--</option>
+        <% session.cates.forEach(function(res){ %>
+          <option value="<%= res['name'] %>"><%= res['name'] %></option>
+        <% }) %>
 		    </select>
 		  </div>
 			<div>
@@ -45,6 +44,7 @@
         $("#inputTitle").val( "<%= post['title'] %>" );
         $("#inputPath").val( "<%= post['pathname'] %>"  );
         $("#text-area").val( `<%= post['markdown_content'] %>`)  
+        $("#post-cate").val( `<%= post['postcate'] %>`)  
         if ( 4 == "<%= post['status'] %>"){   $("#isHold").prop('checked','true') } ;
         if(1=="<%= post['allow_comment'] %>") {   $("#isComment").prop('checked','true')}  ;
       }

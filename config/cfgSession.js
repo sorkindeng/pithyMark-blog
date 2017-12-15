@@ -6,6 +6,7 @@ const cfgSession = {
     userid: '',
     username: ''
   },
+  cates:[],
 
   postCounts : 0,
   postPages : 0
