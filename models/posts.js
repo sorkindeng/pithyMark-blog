@@ -8,8 +8,11 @@ var _tableName = 'pmb_posts';
 */
 
 // 获取文章总数
-let getCounts = async function() {
-  let _sql = `SELECT COUNT(*) FROM ${_tableName};`
+let getCounts = async function(isPublic) {
+  let _sql = `SELECT COUNT(*) FROM ${_tableName}
+              WHERE posttype=0`;
+  let strWhere = (isPublic ? " AND status=3":" AND status<>9" );
+  _sql += strWhere;
 
   let ret = await mysql.query( _sql, [] )
   if ((ret!=null) && (ret!=undefined)){
@@ -24,10 +27,19 @@ function postsFormat(posts){
   }) 
 }
 
-// 分页查询
+// 分页查询， status<>9，后台管理所有文章
 let findForPage = function(offset, rows){
-  let _sql=`SELECT id,posttype,status,title,create_time FROM ${_tableName} 
+  let _sql=`SELECT id,posttype,status,title,pathname,summary,create_time FROM ${_tableName} 
             WHERE status<>9 
+            AND posttype=0
+            ORDER BY id DESC
+            LIMIT ${offset},${rows};`
+  return mysql.query(_sql)
+}
+//分页查询， status=3，前台显示发布状态的文章
+let findForPage2 = function(offset, rows){
+  let _sql=`SELECT id,posttype,status,title,pathname,summary,create_time FROM ${_tableName} 
+            WHERE status=3 
             AND posttype=0
             ORDER BY id DESC
             LIMIT ${offset},${rows};`
@@ -72,16 +84,29 @@ let findById = function(postId) {
 }
 // 查询文章
 let findByPathname = function(pathname) {
-  let _sql=`SELECT id,title,pathname FROM ${_tableName} WHERE pathname=${pathname}`
+  let _sql=`SELECT id,title,pathname FROM ${_tableName} WHERE pathname="${pathname}"`
   return mysql.query( _sql)
 }
 
+// 查询文章
+let getByPathname = function(pathname) {
+  let _sql=`SELECT * FROM ${_tableName} WHERE pathname="${pathname}"`
+  return mysql.query( _sql)
+}
 // 查询文章 group by
 let findAllByCate = function() {
   let _sql=`SELECT postcate, count(*) as counts FROM ${_tableName} GROUP BY postcate;`
   return mysql.query( _sql)
 }
 
+// 查询已发布文章
+let findAll = function() {
+  let _sql=`SELECT id,posttype,status,postcate,title,pathname,create_time FROM ${_tableName} 
+            WHERE status=3 
+            AND posttype=0
+            ORDER BY id DESC;`
+  return mysql.query( _sql)
+}
 // 查询栏目
 let findAllCatalog = function() {
   let _sql=`SELECT id,posttype,status,title,pathname FROM ${_tableName}
@@ -114,10 +139,13 @@ module.exports={
   updateRowById,
   updateStatusById,
   deleteById,
+  getByPathname,
   findById,
   findByPathname,
+  findAll,
   findAllByCate,
   findAllCatalog,
-  findForPage
+  findForPage,
+  findForPage2
 }
   

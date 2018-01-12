@@ -10,8 +10,8 @@ const config = {
     HOST: 'localhost'
   },
 
-  adminPagingSize: 15,
-  postsListSize: 10
+  adminPagingSize: 5,
+  postsListSize: 5
 }
 
 module.exports = config

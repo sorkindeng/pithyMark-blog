@@ -7,22 +7,10 @@ var md5 = require('md5');
 var config = require('../config/config');
 var queryString = require('querystring'); 
 //var utilsFunc = require('../service/utilsFunc')
-
-
-async function initSessionData(ctx){
-  let counts = await postModel.getCounts();  
-  if ((counts!=null) && (counts!=undefined)){
-    ctx.session.postCounts = counts;
-    ctx.session.postPages = Math.ceil(counts/config.adminPagingSize)
-  }
-  let cates= await cateModel.findAll();
-  //cates = utilsFunc.cateFormat(cates);
-  ctx.session.cates = cates;
-}
+//var markedRender = require('../service/marked-render'); 
 
 router.get('/admin', async (ctx, next) => {
   if (ctx.session.user){
-    console.log(ctx.session);
     await ctx.render('admin', {
       title: 'admin',
       session: ctx.session
@@ -34,51 +22,6 @@ router.get('/admin', async (ctx, next) => {
 })
 
 
-router.get('/logout', async (ctx, next) => {
-  console.log(ctx.session);
-  
-  ctx.session = null;
-  console.log('登出成功')
-  ctx.redirect('/login');
-  
-})
-
-router.get('/login', async (ctx, next) => {
-  console.log(ctx.session);
-  //判断用户是否已经登陆
-  if (ctx.session.user) {     
-    ctx.redirect('/admin');
-  }else{
-    await ctx.render('login', {
-      title: 'login'
-    })
-  }
-})
-
-
-router.post('/login', async (ctx, next) => {
-	let  userName = ctx.request.body.username
-	let  userPwd = ctx.request.body.password
-	
-  ctx.body = 'false'
-  await userModel.findFounderPassword(userPwd)
-  .then(result => {
-    if (md5(userPwd) === result[0]['optvalue']) {
-      ctx.body = 'true'
-      ctx.session.user = {
-        username: 'admin',
-        userid: 1
-      }
-    }else{
-      console.log('密码不正确');    
-    }
-  }).catch(err => {
-    console.log('查询数据库错误2');    
-    //console.log(err);
-  })
-  await initSessionData(ctx);
-
-})
 
 router.get('/admin/options', async (ctx, next) => {
   console.log(ctx.session);
@@ -214,6 +157,8 @@ router.post('/admin/catalog/save', async (ctx, next) => {
   //   return ctx.redirect('/login');
   // }
   console.log(ctx.request.body);
+  var markedRender = require('../service/marked-render'); 
+  
   let postId=0;
   let values = [];
   let status = 0;
@@ -223,9 +168,10 @@ router.post('/admin/catalog/save', async (ctx, next) => {
   values.push(ctx.request.body.txtCate);
   values.push(ctx.request.body.txtTitle );
   values.push(ctx.request.body.txtPath);
-  values.push(ctx.request.body.txtContent.substr(0,20) );
-  values.push(ctx.request.body.txtContent);
-  values.push(ctx.request.body.txtContent);
+  values.push(ctx.request.body.txtContent.substr(0,20) );     //summary
+  values.push(ctx.request.body.txtContent);       //markdown 
+  let strHtml = await markedRender.toHtml(ctx.request.body.txtContent)
+  values.push(strHtml);         //html
   values.push( ctx.request.body.isComment ? 1 : 0 );
   let dt= new Date();
   values.push(dt.toLocaleString() );
@@ -280,7 +226,7 @@ router.get('/admin/posts', async (ctx, next) => {
   let offset=config.adminPagingSize*(page-1);
   let rows=config.adminPagingSize;
   let ret = await postModel.findForPage(offset, rows);
-  ctx.session.postCurPage =page;
+  ctx.session.postAdminCurPage =page;
   //utlFunc.postsFormat(ret);
 
   return await ctx.render('admin-posts', {
@@ -333,6 +279,8 @@ router.post('/admin/post/save', async (ctx, next) => {
   //   return ctx.redirect('/login');
   // }
   console.log(ctx.request.body);
+  var markedRender = require('../service/marked-render'); 
+
   let postId=0;
   let values = [];
   let status = 0;
@@ -342,9 +290,10 @@ router.post('/admin/post/save', async (ctx, next) => {
   values.push(ctx.request.body.txtCate);
   values.push(ctx.request.body.txtTitle );
   values.push(ctx.request.body.txtPath);
-  values.push(ctx.request.body.txtContent.substr(0,20) );
-  values.push(ctx.request.body.txtContent);
-  values.push(ctx.request.body.txtContent);
+  values.push(ctx.request.body.txtContent.substr(0,20) );     //summary
+  values.push(ctx.request.body.txtContent);       //markdown 
+  let strHtml = await markedRender.toHtml(ctx.request.body.txtContent)
+  values.push(strHtml);         //html
   values.push( ctx.request.body.isComment ? 1 : 0 );
   let dt= new Date();
   values.push(dt.toLocaleString() );

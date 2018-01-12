@@ -70,6 +70,10 @@ th {
   display: none;
 }
 
+.menuTag{
+  width:16px;
+  height:16px;
+}
 .input-border0{
   background:transparent;
   border-style: solid;

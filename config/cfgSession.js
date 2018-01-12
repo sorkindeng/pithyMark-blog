@@ -6,10 +6,19 @@ const cfgSession = {
     userid: '',
     username: ''
   },
+  //站点配置信息
+  options: [],
+  //分类信息
   cates:[],
 
+  //分页信息
   postCounts : 0,
-  postPages : 0
+  postPages : 1,
+  postCurPage: 1,
+  postAdminCounts: 0,
+  postAdminPages:1,
+  postAdminCurPage:1,
 
+  isInit: false
 
 }

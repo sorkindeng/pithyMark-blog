@@ -16,8 +16,7 @@
 </script>
 
 <div id="main">
-  <% posts.forEach(function(item){ %>
-    <article class="post">
+  <article class="post detail">
       <div class="meta">
         <div>
           <span class="date">
@@ -26,28 +25,14 @@
         </div>
       </div>
       <h1 class="title">
-        <a href="/<%= item['pathname'] %>.html"><%= item['title'] %></a>
+        <%= item['title'] %>
       </h1>
   
       <div class="entry-content">
-        <%= item['summary'] %>
-        <p class="more">
-            <a href="/<%= item['pathname'] %>.html">阅读全文 »</a>
-        </p>
+        <%- item['content'] %>
       </div>
-  
-    </article>
-  <% }) %>
-  <nav class="pagination">
-    <% if (session.postCurPage > 1 ){ %>
-      <a class="prev" href='/?page=<%- (session.postCurPage-1) %>'>&laquo; 上一页</a>
-    <% } %>
-
-    <% if (session.postCurPage < session.postPages ){ %>
-      <a class="next" href='/?page=<%- (session.postCurPage+1) %>'>下一页 &raquo;</a>
-    <% } %>
-  
-    <div class="center"><a href="/archives"> 归 档 </a></div>
-  </nav>
+      <p>本文链接：<a href="/<%= item['pathname'] %>.html"><%= href %></a></p>
+      
+  </article>
   
 <% include footer %>

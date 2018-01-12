@@ -1,0 +1,38 @@
+<% include header %>
+
+<script  type="text/javascript">
+  function formatDate(strDate){
+    var dtDate = new Date(strDate);
+    var month = dtDate.getMonth() +1;
+    var strDate = dtDate.getFullYear();
+    strDate +="-";
+    strDate += (month <10 ? "0"+month : month );
+    strDate += "-";
+    strDate += (dtDate.getDate()<10 ? "0"+dtDate.getDate():dtDate.getDate() );
+    return strDate;
+  }
+</script>
+
+<div id="main">
+  <article class="post detail">
+    <h1 class="title"><%= pagename %></h1>
+    <% for (var key in posts) { %>
+      <div class="entry-content">
+        <h3><%= key %> ( <%= posts[key].length %> )  </h3>
+        <ul>
+          <% posts[key].forEach(function(item){ %>
+          <li>
+              <a href="/<%= item['pathname'] %>.html"> <%= item['title'] %> </a>&nbsp;
+              <span class="date">
+                  <script> document.write(formatDate( `<%= item['create_time'] %>` ))  </script>
+              </span>
+          </li>
+          <% }) %>
+        </ul>
+    </div>
+
+
+    <% } %>
+    </article>
+  
+<% include footer %>

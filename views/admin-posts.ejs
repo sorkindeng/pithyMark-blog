@@ -63,12 +63,12 @@
         <tr>
           <td colspan="4">
             <div class="grayr">
-              <% if (session.postCurPage == 1 ){ %><span class="disabled">上一页</span>
-              <% }else{ %><a href='/admin/posts?page=<%- (session.postCurPage-1) %>'>上一页</a>
+              <% if (session.postAdminCurPage == 1 ){ %><span class="disabled">上一页</span>
+              <% }else{ %><a href='/admin/posts?page=<%- (session.postAdminCurPage-1) %>'>上一页</a>
               <% } %>
-              <%- session.postCurPage %> / <%- session.postPages %> ( <%- session.postCounts %> )
-              <% if (session.postCurPage == session.postPages ){ %><span class="disabled">下一页</span>
-              <% }else{ %><a href='/admin/posts?page=<%- (session.postCurPage+1) %>'>下一页</a>
+              <%- session.postAdminCurPage %> / <%- session.postAdminPages %> ( <%- session.postAdminCounts %> )
+              <% if (session.postAdminCurPage == session.postAdminPages ){ %><span class="disabled">下一页</span>
+              <% }else{ %><a href='/admin/posts?page=<%- (session.postAdminCurPage+1) %>'>下一页</a>
               <% } %>
             </div>
           </td>
