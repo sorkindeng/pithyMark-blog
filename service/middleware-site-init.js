@@ -10,7 +10,7 @@ async function sessionInit(ctx, next) {
   console.log(`===ctx.path=${ctx.path}`)
   console.log(`===ctx.host=${ctx.request.host}`)
   console.log(`===ctx.ip=${ctx.request.ip}`)
-  console.log(`===ctx.sessionid=` + ctx.cookies.get('u-session-id'))
+  console.log(`===ctx.sessionid=` + ctx.cookies.get('koa:sid'))
   console.log(`=====================================================================`)
   
   const start = new Date()

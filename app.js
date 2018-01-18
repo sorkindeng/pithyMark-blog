@@ -1,9 +1,13 @@
 var Koa=require('koa');
 var bodyParser = require('koa-bodyparser');
 var views = require('koa-views');
-var session = require('koa-session-minimal');
+//var session = require('koa-session-minimal');
+var session = require('koa-session');
 var koaStatic = require('koa-static');
 var siteInit = require('./service/middleware-site-init')
+var fileStore = require('./service/koa-session-file')
+var path = require('path');
+var knotCounter = require('./service/middleware-knotCounter')
 
 
 var routeIndex = require('./routes/index')
@@ -11,30 +15,27 @@ var routeAdmin = require('./routes/admin')
 var routePosts = require('./routes/posts')
 
 var app=new Koa();
+app.keys = ['pithyMark'];
 
 // 配置静态资源加载中间件
 app.use(koaStatic(__dirname + '/public'))
 
 // 配置session中间件
+//app.use(session());
 app.use(session({
-  key: 'u-session-id',
-  cookie: {                   // 与 cookie 相关的配置
-    domain: 'localhost',    // 写 cookie 所在的域名
-    path: '/',              // 写 cookie 所在的路径
-    maxAge: 1000 * 60 * 60*24,      // cookie 有效时长
-    httpOnly: true,         // 是否只用于 http 请求中获取
-    overwrite: false        // 是否允许重写
-  }
-}))
+  key: 'koa:sid',
+  maxAge: 86400000,
+  store: new fileStore({cacheDir: path.resolve(__dirname, './cacheSession/')})
+}, app))
 
-
-app.use(views((__dirname + '/views'), {
-  extension: 'ejs'
-}))
+// 配置模板类型
+app.use(views((__dirname + '/views'), {extension: 'ejs'}))
 
 app.use(bodyParser());
 
+// 自定义中间件
 app.use(siteInit.sessionInit);
+app.use(knotCounter({cache: true}));
 
 // routes
 app.use(routeIndex.routes(), routeIndex.allowedMethods())

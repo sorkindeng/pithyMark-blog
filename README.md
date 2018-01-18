@@ -1,7 +1,7 @@
 # pithyMark-blog
 A pithy blog based on nodejs,koa2,ajax,mysql
 ### 2017-11-22 init
-决定用简洁的，尽量少的依赖来完成一个基本的blog系统
+简洁的，尽量少的依赖来完成一个基本的blog系统
 #### 功能定义：(home)
 - 栏目封面页（首页，关于等）
 - 文章详情页，post详情页
